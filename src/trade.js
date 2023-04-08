@@ -10,32 +10,36 @@ const alpaca = new Alpaca({
 });
 
 export default async function tradeDualMomentum(prices) {
-  const bestAsset = calculateRelativeMomentum(prices);
-  const investInAsset = calculateAbsoluteMomentum(prices, bestAsset);
+  try {
+    const bestAsset = calculateRelativeMomentum(prices);
+    const investInAsset = calculateAbsoluteMomentum(prices, bestAsset);
 
-  const targetSymbol = investInAsset ? bestAsset : "BIL";
-  const currentPosition = await alpaca.getPosition(targetSymbol);
+    const targetSymbol = investInAsset ? bestAsset : "BIL";
+    const currentPosition = await alpaca.getPosition(targetSymbol);
 
-  if (currentPosition) {
-    const quantity = currentPosition.qty;
+    if (currentPosition) {
+      const quantity = currentPosition.qty;
+      await alpaca.createOrder({
+        symbol: targetSymbol,
+        qty: quantity,
+        side: "sell",
+        type: "market",
+        time_in_force: "gtc",
+      });
+    }
+
+    const availableCash = (await alpaca.getAccount()).cash;
+    const targetPrice = (await alpaca.getLatestTrade(targetSymbol)).price;
+    const targetQuantity = Math.floor(availableCash / targetPrice);
+
     await alpaca.createOrder({
       symbol: targetSymbol,
-      qty: quantity,
-      side: "sell",
+      qty: targetQuantity,
+      side: "buy",
       type: "market",
       time_in_force: "gtc",
     });
+  } catch (err) {
+    console.log("err!!", Object.keys(err));
   }
-
-  const availableCash = (await alpaca.getAccount()).cash;
-  const targetPrice = (await alpaca.getLatestTrade(targetSymbol)).price;
-  const targetQuantity = Math.floor(availableCash / targetPrice);
-
-  await alpaca.createOrder({
-    symbol: targetSymbol,
-    qty: targetQuantity,
-    side: "buy",
-    type: "market",
-    time_in_force: "gtc",
-  });
 }
