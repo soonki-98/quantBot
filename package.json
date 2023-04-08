@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/app.js"
+    "start": "nodemon ./src/app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@alpacahq/alpaca-trade-api": "^2.16.1",
+    "express": "^4.18.2",
+    "node-schedule": "^2.1.1",
+    "nodemon": "^2.0.22",
     "yahoo-finance2": "^2.3.10",
     "yfinance": "^0.0.6"
   },
