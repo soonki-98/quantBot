@@ -6,7 +6,6 @@ const alpaca = new Alpaca({
   keyId: process.env.NODE_ALPACA_PAPER_KEY,
   secretKey: process.env.NODE_ALPACA_PAPER_SECRET,
   paper: true,
-  usePolygon: false,
 });
 
 export default async function tradeDualMomentum(prices) {
@@ -15,8 +14,9 @@ export default async function tradeDualMomentum(prices) {
     const investInAsset = calculateAbsoluteMomentum(prices, bestAsset);
 
     const targetSymbol = investInAsset ? bestAsset : "BIL";
+    console.log(":::::::", targetSymbol);
     const currentPosition = await alpaca.getPosition(targetSymbol);
-
+    console.log(currentPosition);
     if (currentPosition) {
       const quantity = currentPosition.qty;
       await alpaca.createOrder({
@@ -29,17 +29,21 @@ export default async function tradeDualMomentum(prices) {
     }
 
     const availableCash = (await alpaca.getAccount()).cash;
-    const targetPrice = (await alpaca.getLatestTrade(targetSymbol)).price;
+    console.log("availableCash", availableCash);
+    const targetPrice = (await alpaca.getLatestTrade(targetSymbol)).Price;
+    console.log("targetPrice", targetPrice);
     const targetQuantity = Math.floor(availableCash / targetPrice);
+    console.log("targetQuantity", targetQuantity);
 
-    await alpaca.createOrder({
+    const result = await alpaca.createOrder({
       symbol: targetSymbol,
       qty: targetQuantity,
       side: "buy",
       type: "market",
       time_in_force: "gtc",
     });
+    console.log(result);
   } catch (err) {
-    console.log("err!!", Object.keys(err));
+    console.log("err!!", err.response);
   }
 }
