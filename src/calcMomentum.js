@@ -7,7 +7,9 @@ export function calculateRelativeMomentum(prices) {
     returns[symbol] = (endPrice - startPrice) / startPrice;
   }
 
-  return Object.keys(returns).reduce((a, b) => (returns[a] > returns[b] ? a : b));
+  return Object.keys(returns).reduce((a, b) =>
+    returns[a] > returns[b] ? a : b
+  );
 }
 
 export function calculateAbsoluteMomentum(prices, bestAsset) {
@@ -17,7 +19,8 @@ export function calculateAbsoluteMomentum(prices, bestAsset) {
 
   const startRiskFreePrice = prices["BIL"][prices["BIL"].length - 12].adjClose;
   const endRiskFreePrice = prices["BIL"][prices["BIL"].length - 1].adjClose;
-  const riskFreeReturn = (endRiskFreePrice - startRiskFreePrice) / startRiskFreePrice;
+  const riskFreeReturn =
+    (endRiskFreePrice - startRiskFreePrice) / startRiskFreePrice;
 
   return assetReturn > riskFreeReturn;
 }

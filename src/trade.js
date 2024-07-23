@@ -1,4 +1,7 @@
-import { calculateAbsoluteMomentum, calculateRelativeMomentum } from "./calcMomentum.js";
+import {
+  calculateAbsoluteMomentum,
+  calculateRelativeMomentum,
+} from "./calcMomentum.js";
 
 import Alpaca from "@alpacahq/alpaca-trade-api";
 

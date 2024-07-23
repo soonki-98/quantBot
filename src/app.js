@@ -5,7 +5,7 @@ import express from "express";
 
 const app = express();
 
-app.listen(5000, async () => {
+app.listen(8080, async () => {
   scheduleJob("0 0 12 30 * *", async () => {
     const data = await collectDatas();
     trade(data);
