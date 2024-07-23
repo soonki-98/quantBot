@@ -1,8 +1,8 @@
-name: Run npm start on the 23rd of each month at 11:05 AM
+name: 스케줄러
 
 on:
   schedule:
-    - cron: "10 11 23 * *"
+    - cron: "25 11 * * *"
 
 jobs:
   run-main-js:
