@@ -1,0 +1,67 @@
+name: Run npm start on the 23rd of each month at 11:05 AM
+
+on:
+  schedule:
+    - cron: "10 11 23 * *"
+
+jobs:
+  run-main-js:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18.18.2" # 원하는 Node.js 버전으로 변경
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run npm start
+        run: npm start
+# name: Run npm start on the first weekday of each month
+
+# on:
+#   schedule:
+#     - cron: "0 0 1-7 * *"
+
+# jobs:
+#   run-main-js:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: "18.18.2" # 원하는 Node.js 버전으로 변경
+
+#       - name: Check if today is the first weekday of the month
+#         id: check-first-weekday
+#         run: |
+#           current_day=$(date +'%d')
+#           current_weekday=$(date +'%u')
+#           if [[ "$current_weekday" -lt 6 && "$current_day" -le 7 ]]; then
+#             for day in $(seq -f "%02g" 1 $((current_day-1))); do
+#               if [[ "$(date -d "$day" +'%u')" -lt 6 ]]; then
+#                 echo "Not the first weekday. Exiting."
+#                 exit 0
+#               fi
+#             done
+#             echo "::set-output name=first_weekday::true"
+#           else
+#             echo "::set-output name=first_weekday::false"
+#           fi
+
+#       - name: Install dependencies
+#         if: steps.check-first-weekday.outputs.first_weekday == 'true'
+#         run: npm install
+
+#       - name: Run npm start
+#         if: steps.check-first-weekday.outputs.first_weekday == 'true'
+#         run: npm start
