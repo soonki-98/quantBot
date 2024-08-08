@@ -1,4 +1,4 @@
-name: Run npm start on the 23rd of each month at 11:05 AM
+name: 스케줄러
 
 on:
   schedule:
