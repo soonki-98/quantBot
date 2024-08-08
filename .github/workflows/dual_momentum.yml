@@ -22,6 +22,10 @@ jobs:
         run: npm install
 
       - name: Run npm start
+        env: # 여기서 환경 변수를 설정합니다
+          NODE_ENV: production
+          NODE_ALPACA_PAPER_KEY: ${{ secrets.NODE_ALPACA_PAPER_KEY }}
+          NODE_ALPACA_PAPER_SECRET: ${{ secrets.NODE_ALPACA_PAPER_SECRET }}
         run: npm start
 # name: Run npm start on the first weekday of each month
 
