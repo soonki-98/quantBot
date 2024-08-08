@@ -3,7 +3,7 @@ name: 스케줄러
 on:
   schedule:
     # s m h d m
-    - cron: "0 42 * * *"
+    - cron: "0 0 2 * *"
 
 jobs:
   run-main-js:
