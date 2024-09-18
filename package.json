@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "@alpacahq/alpaca-trade-api": "^2.16.1",
+    "alphavantage": "^2.5.0",
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "node-schedule": "^2.1.1",
     "nodemon": "^2.0.22",

@@ -4,6 +4,8 @@ import {
 } from "./calcMomentum.js";
 
 import Alpaca from "@alpacahq/alpaca-trade-api";
+import dotenv from "dotenv";
+dotenv.config();
 
 const alpaca = new Alpaca({
   keyId: process.env.NODE_ALPACA_PAPER_KEY,
