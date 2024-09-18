@@ -1,29 +1,33 @@
-# name: 스케줄러
+name: 스케줄러
 
-# on:
-#   schedule:
-#     # s m h d m
-#     - cron: "46 13 1 * 1-5"
+on:
+  schedule:
+    # 매달 1일 UTC 기준 오전 5시 (한국 시간 오후 2시)
+    - cron: "0 5 1 * *"
 
-# jobs:
-#   run-main-js:
-#     runs-on: ubuntu-latest
+jobs:
+  run-main-js:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v2
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: "18.18.2" # 원하는 Node.js 버전으로 변경
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18.18.2" # 원하는 Node.js 버전으로 변경
 
-#       - name: Install dependencies
-#         run: npm install
+      - name: Install dependencies
+        run: npm install
 
-#       - name: Run npm start
-#         env: # 여기서 환경 변수를 설정합니다
-#           NODE_ENV: production
-#           NODE_ALPACA_PAPER_KEY: ${{ secrets.NODE_ALPACA_PAPER_KEY }}
-#           NODE_ALPACA_PAPER_SECRET: ${{ secrets.NODE_ALPACA_PAPER_SECRET }}
-#         run: npm start
+      - name: Build the project
+        run: npm run build
+
+      - name: Run npm start
+        env: # 여기서 환경 변수를 설정합니다
+          NODE_ENV: production
+          NODE_ALPACA_PAPER_KEY: ${{ secrets.NODE_ALPACA_PAPER_KEY }}
+          NODE_ALPACA_PAPER_SECRET: ${{ secrets.NODE_ALPACA_PAPER_SECRET }}
+          NODE_ALPHA_VANTAGE_API_KEY: ${{ secrets.NODE_ALPHA_VANTAGE_API_KEY }}
+        run: npm start
