@@ -39,38 +39,40 @@ function tradeDualMomentum(prices) {
             if (currentPosition) {
                 const quantity = currentPosition.qty;
                 console.log(`13. 보유 중인 ${targetSymbol} 수량 : ${quantity}`);
+                console.log(`14. 보유 중인 ${targetSymbol} 매도 시작`);
                 try {
-                    yield alpaca.createOrder({
+                    const result = yield alpaca.createOrder({
                         symbol: targetSymbol,
                         qty: quantity,
                         side: "sell",
                         type: "market",
                         time_in_force: "gtc",
                     });
-                    console.log(`14. 보유 중인 ${targetSymbol} 매도 완료`);
+                    console.log(`15. 보유 중인 ${targetSymbol} 매도 완료`, result);
                 }
                 catch (err) {
-                    console.log(`14. 보유 중인 ${targetSymbol} 매도 중 에러 발생`, err);
+                    console.log(`15. 보유 중인 ${targetSymbol} 매도 중 에러 발생`, err);
                 }
             }
             const availableCash = (yield alpaca.getAccount()).cash;
-            console.log("15. 투자 가능 금액", availableCash);
+            console.log("16. 투자 가능 금액", availableCash);
             const targetPrice = (yield alpaca.getLatestTrade(targetSymbol)).Price;
-            console.log("16. 목표 자산 가격", targetPrice);
+            console.log("17. 목표 자산 가격", targetPrice);
             const targetQuantity = Math.floor(availableCash / targetPrice);
-            console.log("17. 투자 수량", targetQuantity);
+            console.log("18. 투자 수량", targetQuantity);
             try {
-                console.log(`18. ${targetSymbol} 주문 시작`);
-                yield alpaca.createOrder({
+                console.log(`19. ${targetSymbol} 주문 시작`);
+                const result = yield alpaca.createOrder({
                     symbol: targetSymbol,
                     qty: targetQuantity,
                     side: "buy",
                     type: "market",
                     time_in_force: "gtc",
                 });
+                console.log(`20. ${targetSymbol} 주문 완료`, result);
             }
             catch (err) {
-                console.log(`18. ${targetSymbol} 주문 중 에러 발생`, err);
+                console.log(`19. ${targetSymbol} 주문 중 에러 발생`, err);
             }
         }
         catch (_err) {
