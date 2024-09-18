@@ -1,10 +1,11 @@
 import {
   calculateAbsoluteMomentum,
   calculateRelativeMomentum,
-} from "./calcMomentum.js";
+} from "./calcMomentum";
 
 import Alpaca from "@alpacahq/alpaca-trade-api";
 import dotenv from "dotenv";
+import { StockDataBySymbol, StockSymbol } from "./collectDatas";
 dotenv.config();
 
 const alpaca = new Alpaca({
@@ -13,9 +14,9 @@ const alpaca = new Alpaca({
   paper: true,
 });
 
-export default async function tradeDualMomentum(prices) {
+export default async function tradeDualMomentum(prices: StockDataBySymbol) {
   try {
-    const bestAsset = calculateRelativeMomentum(prices);
+    const bestAsset = calculateRelativeMomentum(prices) as StockSymbol;
     const investInAsset = calculateAbsoluteMomentum(prices, bestAsset);
 
     const targetSymbol = investInAsset ? bestAsset : "BIL";
@@ -48,7 +49,8 @@ export default async function tradeDualMomentum(prices) {
       time_in_force: "gtc",
     });
     console.log(result);
-  } catch (err) {
+  } catch (_err) {
+    const err = _err as any;
     console.log("err!!", err.response);
   }
 }
