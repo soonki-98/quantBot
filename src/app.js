@@ -10,6 +10,7 @@ const app = express();
 app.listen(8080, async () => {
   try {
     const data = await collectDatas();
+    console.log(data);
     // trade(data);
   } catch (err) {
     console.log(err);
