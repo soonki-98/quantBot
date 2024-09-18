@@ -21,38 +21,33 @@ const SYMBOLS = ["SPY", "EFA", "BIL"];
 const alpha = (0, alphavantage_1.default)({
     key: (_a = process.env.NODE_ALPHA_VANTAGE_API_KEY) !== null && _a !== void 0 ? _a : "",
 });
-function filterDataByDate(data, startDate) {
-    const filtered = {};
-    for (const date in data["Monthly Time Series"]) {
-        if (new Date(date) >= new Date(startDate)) {
-            filtered[date] = data["Monthly Time Series"][date];
-        }
-    }
-    return filtered;
-}
-// 특정 주식(AAPL)의 월간 데이터 가져오기
 function getMonthlyData() {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log("2. 월별 데이터 수집 시작");
         try {
             const monthlyResult = yield Promise.all(SYMBOLS.map((symbol) => alpha.data.monthly(symbol)));
+            console.log("3. 월별 데이터 수집 완료");
             const result = {
                 SPY: {},
                 EFA: {},
                 BIL: {},
             };
+            console.log("4. SPY, EFA, BIL 별로 데이터 정리 시작");
             monthlyResult.forEach((data) => {
-                result[data["Meta Data"]["2. Symbol"]] = filterDataByDate(data, "1970-01-01");
+                result[data["Meta Data"]["2. Symbol"]] =
+                    data["Monthly Time Series"];
             });
+            console.log("5. SPY, EFA, BIL 별로 데이터 정리 완료");
             return result;
         }
         catch (error) {
-            console.error(error);
+            console.error("2. 월별 데이터 수집 중 에러 발생", error);
         }
     });
 }
-// 특정 주식(AAPL)의 월간 데이터 가져오기
 function fetchAllData() {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log("1. 데이터 수집 시작");
         return yield getMonthlyData();
     });
 }

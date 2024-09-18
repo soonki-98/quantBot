@@ -9,6 +9,9 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 (0, collectDatas_js_1.default)()
     .then((data) => {
+    if (!data) {
+        console.error("수집된 데이터가 없습니다.");
+    }
     if (data) {
         (0, trade_1.default)(data);
     }

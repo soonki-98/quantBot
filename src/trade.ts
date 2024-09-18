@@ -15,42 +15,60 @@ const alpaca = new Alpaca({
 });
 
 export default async function tradeDualMomentum(prices: StockDataBySymbol) {
+  console.log("6. Dual Momentum 전략 시작");
   try {
+    console.log("7. 상대 모멘텀 계산 시작");
     const bestAsset = calculateRelativeMomentum(prices) as StockSymbol;
+    console.log("8. 상대 모멘텀 계산 완료", bestAsset);
+
+    console.log("9. 절대 모멘텀 계산 시작");
     const investInAsset = calculateAbsoluteMomentum(prices, bestAsset);
+    console.log("10. 절대 모멘텀 계산 완료", investInAsset);
 
     const targetSymbol = investInAsset ? bestAsset : "BIL";
-    console.log(":::::::", targetSymbol);
+    console.log("11. 최종 투자 대상", targetSymbol);
+
     const currentPosition = await alpaca.getPosition(targetSymbol);
-    console.log(currentPosition);
+    console.log("12. 보유 중인 자산", currentPosition);
+
     if (currentPosition) {
       const quantity = currentPosition.qty;
-      await alpaca.createOrder({
-        symbol: targetSymbol,
-        qty: quantity,
-        side: "sell",
-        type: "market",
-        time_in_force: "gtc",
-      });
+      console.log(`13. 보유 중인 ${targetSymbol} 수량 : ${quantity}`);
+      try {
+        await alpaca.createOrder({
+          symbol: targetSymbol,
+          qty: quantity,
+          side: "sell",
+          type: "market",
+          time_in_force: "gtc",
+        });
+        console.log(`14. 보유 중인 ${targetSymbol} 매도 완료`);
+      } catch (err) {
+        console.log(`14. 보유 중인 ${targetSymbol} 매도 중 에러 발생`, err);
+      }
     }
 
     const availableCash = (await alpaca.getAccount()).cash;
-    console.log("availableCash", availableCash);
+    console.log("15. 투자 가능 금액", availableCash);
     const targetPrice = (await alpaca.getLatestTrade(targetSymbol)).Price;
-    console.log("targetPrice", targetPrice);
+    console.log("16. 목표 자산 가격", targetPrice);
     const targetQuantity = Math.floor(availableCash / targetPrice);
-    console.log("targetQuantity", targetQuantity);
+    console.log("17. 투자 수량", targetQuantity);
 
-    const result = await alpaca.createOrder({
-      symbol: targetSymbol,
-      qty: targetQuantity,
-      side: "buy",
-      type: "market",
-      time_in_force: "gtc",
-    });
-    console.log(result);
+    try {
+      console.log(`18. ${targetSymbol} 주문 시작`);
+      await alpaca.createOrder({
+        symbol: targetSymbol,
+        qty: targetQuantity,
+        side: "buy",
+        type: "market",
+        time_in_force: "gtc",
+      });
+    } catch (err) {
+      console.log(`18. ${targetSymbol} 주문 중 에러 발생`, err);
+    }
   } catch (_err) {
     const err = _err as any;
-    console.log("err!!", err.response);
+    console.error("6. Dual Momentum 전략 중 에러 발생", err);
   }
 }
