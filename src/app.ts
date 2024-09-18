@@ -14,5 +14,5 @@ collectDatas()
     }
   })
   .catch((err) => {
-    console.error(err);
+    console.error("데이터 수집 중 에러 발생", err);
   });

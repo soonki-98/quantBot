@@ -42,6 +42,7 @@ function getMonthlyData() {
         }
         catch (error) {
             console.error("2. 월별 데이터 수집 중 에러 발생", error);
+            throw error;
         }
     });
 }
